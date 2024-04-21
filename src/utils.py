@@ -30,6 +30,14 @@ def check_connection(ctx):
     return None, False, False
 
 
+def is_user_in_voice_channel(ctx):
+    try:
+        ctx.author.voice.channel.id
+        return True
+    except:
+        return False
+
+
 async def download(link, download_path):
 
     # TODO download queue
@@ -60,10 +68,14 @@ async def download(link, download_path):
 
 
 async def skip_queue(ctx, messages):
+    print("eeeeeeeeeeeeeeeeeeeeeeeeee")
     vc, is_connected, is_in_same_channel = check_connection(ctx)
+    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
     if not is_connected:
+        print("ppppppppppppppppppppppppppppppppp")
         await ctx.send(messages["not_in_voice_channel"])
     else:
+        print("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
         if vc.is_playing() or vc.is_paused():
             vc.stop()
 
