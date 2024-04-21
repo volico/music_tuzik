@@ -1,0 +1,4 @@
+discord.py[voice]==2.3.2
+loguru
+pydantic==1.10.7
+python-dotenv==1.0.1
