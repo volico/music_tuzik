@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import asyncio
+from pathlib import Path
 
 import discord
 from discord.ext import commands
@@ -9,6 +10,7 @@ from src.utils import add_track_queue, check_connection, play, skip_queue
 
 
 settings = AppSettings()
+
 
 TOKEN = settings.TOKEN  # bot's token
 download_path = settings.download_path
@@ -28,6 +30,9 @@ intents.guilds = True
 bot = commands.Bot(command_prefix=command_prefix, intents=intents)
 
 q = asyncio.Queue(maxsize=max_queue_size)
+
+
+Path(download_path).mkdir(parents=True, exist_ok=True)
 
 
 @bot.event
