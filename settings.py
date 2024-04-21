@@ -13,6 +13,7 @@ class AppSettings(BaseSettings):
     TOKEN: str = ""  # bot's token
     download_path: str = "./audio"
     max_queue_size: int = 30  # max number of tracks in queue
+    message_history_length: int = 10
     command_prefix: str = "/"
     messages: dict = {
         "not_in_voice_channel": "I'm not in a voice channel",

@@ -22,6 +22,8 @@ TOKEN = settings.TOKEN  # bot's token
 download_path = settings.download_path
 max_queue_size = settings.max_queue_size  # max number of tracks in queue
 command_prefix = settings.command_prefix
+message_history_length = settings.message_history_length
+
 messages = settings.get_messages()
 
 intents = discord.Intents.default()
@@ -36,6 +38,7 @@ intents.guilds = True
 bot = commands.Bot(command_prefix=command_prefix, intents=intents)
 
 q = asyncio.Queue(maxsize=max_queue_size)
+message_history = []
 
 
 Path(download_path).mkdir(parents=True, exist_ok=True)
@@ -43,11 +46,22 @@ Path(download_path).mkdir(parents=True, exist_ok=True)
 
 @bot.event
 async def on_message(message):
+    if message.author == bot.user:
+        if len(message_history) >= message_history_length:
+            bot_msg = message_history.pop(0)
+            await bot_msg.delete()
+        message_history.append(message)
+
     await bot.process_commands(message)
 
 
 @bot.command(name="play")
 async def add_track(ctx, *, user_input: str):
+    if len(message_history) >= message_history_length:
+        msg = message_history.pop(0)
+        await msg.delete()
+    message_history.append(ctx.message)
+
     if not is_user_in_voice_channel(ctx):
         await ctx.send(messages["user_not_in_voice_channel"])
         return
@@ -56,6 +70,11 @@ async def add_track(ctx, *, user_input: str):
 
 @bot.command(name="skip-play")
 async def skip_add_track(ctx, *, user_input: str):
+    if len(message_history) >= message_history_length:
+        msg = message_history.pop(0)
+        await msg.delete()
+    message_history.append(ctx.message)
+
     if not is_user_in_voice_channel(ctx):
         await ctx.send(messages["user_not_in_voice_channel"])
         return
@@ -65,6 +84,11 @@ async def skip_add_track(ctx, *, user_input: str):
 
 @bot.command(name="skip")
 async def skip(ctx):
+    if len(message_history) >= message_history_length:
+        msg = message_history.pop(0)
+        await msg.delete()
+    message_history.append(ctx.message)
+
     if not is_user_in_voice_channel(ctx):
         await ctx.send(messages["user_not_in_voice_channel"])
         return
@@ -73,6 +97,11 @@ async def skip(ctx):
 
 @bot.command(name="skip-all")
 async def skip_all(ctx):
+    if len(message_history) >= message_history_length:
+        msg = message_history.pop(0)
+        await msg.delete()
+    message_history.append(ctx.message)
+
     if not is_user_in_voice_channel(ctx):
         await ctx.send(messages["user_not_in_voice_channel"])
         return
@@ -89,6 +118,11 @@ async def skip_all(ctx):
 
 @bot.command(name="pause")
 async def pause(ctx):
+    if len(message_history) >= message_history_length:
+        msg = message_history.pop(0)
+        await msg.delete()
+    message_history.append(ctx.message)
+
     if not is_user_in_voice_channel(ctx):
         await ctx.send(messages["user_not_in_voice_channel"])
         return
@@ -102,6 +136,11 @@ async def pause(ctx):
 
 @bot.command(name="resume")
 async def resume(ctx):
+    if len(message_history) >= message_history_length:
+        msg = message_history.pop(0)
+        await msg.delete()
+    message_history.append(ctx.message)
+
     if not is_user_in_voice_channel(ctx):
         await ctx.send(messages["user_not_in_voice_channel"])
         return

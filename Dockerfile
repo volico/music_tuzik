@@ -7,6 +7,7 @@ ENV DOWNLOAD_PATH="./audio"
 ENV MAX_QUEUE_SIZE=30
 ENV COMMAND_PREFIX="/"
 ENV MESSAGES='{"not_in_voice_channel":"Im not in a voice channel","user_not_in_voice_channel":"You are not in a voice channel","unsupported_url":"Unsupported url","queue_full":"Queue is full, please wait fors track to finish","start_playing":"{} plays: '{}'","move_to_another_channel":"Bot was moved to {} channel"}'
+ENV MESSAGE_HISTORY_LENGTH=10
 
 WORKDIR /usr/muzik-tuzik
 
