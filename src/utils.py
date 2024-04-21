@@ -1,34 +1,12 @@
 # -*- coding: utf-8 -*-
 import asyncio
-
 import subprocess
-
-from collections.abc import Mapping
 from os import listdir
 from os.path import isfile, join
 from urllib.parse import urlparse
 
 import discord
 from loguru import logger
-
-
-class LazyDict(Mapping):
-    def __init__(self, *args, **kw):
-        self._raw_dict = dict(*args, **kw)
-
-    def __getitem__(self, key):
-        key, ctx = key[0], key[1]
-        arg = self._raw_dict.__getitem__(key)
-
-        if callable(arg):
-            return arg(ctx)
-        return arg
-
-    def __iter__(self):
-        return iter(self._raw_dict)
-
-    def __len__(self):
-        return len(self._raw_dict)
 
 
 def is_supported(url):
@@ -180,10 +158,11 @@ async def play(q):
             logger.debug(
                 f"Connected to vc: {voice_channel.name} id: {voice_channel.id}, {discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)}"
             )
-        base_message = messages["start_playing", [global_name, fulltitle]]
+        base_message = messages["start_playing"].format(*[global_name, fulltitle])
         if is_connected and not is_in_same_channel:
             await ctx.send(
-                base_message + messages["move_to_another_channel", [voice_channel.name]]
+                base_message
+                + messages["move_to_another_channel"].format(*[voice_channel.name])
             )
         else:
             await ctx.send(base_message)

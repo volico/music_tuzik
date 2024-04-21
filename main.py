@@ -4,26 +4,17 @@ import asyncio
 import discord
 from discord.ext import commands
 from loguru import logger
-from src.utils import add_track_queue, check_connection, LazyDict, play, skip_queue
+from settings import AppSettings
+from src.utils import add_track_queue, check_connection, play, skip_queue
 
 
-TOKEN = ""  # bot's token
-download_path = "./audio"
-max_queue_size = 30  # max number of tracks in queue
-command_prefix = "/"
-messages = LazyDict(
-    {
-        "not_in_voice_channel": "",
-        "user_not_in_voice_channel": "",
-        "unsupported_url": "",
-        "queue_full": "",
-        "start_playing": "",
-        "move_to_another_channel": "",
-    }
-)
+settings = AppSettings()
 
-headers = {"accept": "application/json", "Content-Type": "application/json"}
-
+TOKEN = settings.TOKEN  # bot's token
+download_path = settings.download_path
+max_queue_size = settings.max_queue_size  # max number of tracks in queue
+command_prefix = settings.command_prefix
+messages = settings.get_messages()
 
 intents = discord.Intents.default()
 intents.typing = False
