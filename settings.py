@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from pydantic import BaseSettings
+from typing import Tuple, Type
+
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
 
 
 class EnvSettings(BaseSettings):
-    ENV_FILE: str = "cherry.env"
+    ENV_FILE: str = ""
 
 
 class AppSettings(BaseSettings):
@@ -26,3 +28,14 @@ class AppSettings(BaseSettings):
 
     class Config:
         env_file = EnvSettings().ENV_FILE
+
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: Type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> Tuple[PydanticBaseSettingsSource, ...]:
+        return dotenv_settings, env_settings, init_settings, file_secret_settings
