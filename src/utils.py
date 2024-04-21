@@ -68,14 +68,10 @@ async def download(link, download_path):
 
 
 async def skip_queue(ctx, messages):
-    print("eeeeeeeeeeeeeeeeeeeeeeeeee")
     vc, is_connected, is_in_same_channel = check_connection(ctx)
-    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
     if not is_connected:
-        print("ppppppppppppppppppppppppppppppppp")
         await ctx.send(messages["not_in_voice_channel"])
     else:
-        print("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
         if vc.is_playing() or vc.is_paused():
             vc.stop()
 
@@ -174,6 +170,7 @@ async def play(q):
         if is_connected and not is_in_same_channel:
             await ctx.send(
                 base_message
+                + "\n"
                 + messages["move_to_another_channel"].format(*[voice_channel.name])
             )
         else:
