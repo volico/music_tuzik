@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  muzic-container:
+    container_name: muzic-bot
+    image: "muzik_tuzik:latest"
+    restart: always
+    volumes:
+      - /mnt/volume_disk_mount/audio:/usr/muzik-tuzik/audio
+    environment:
+      ENV_FILE: envs/cherry.env
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 1800
